@@ -1,12 +1,28 @@
-export default function CourseTable() {
-  const courses = [
-    { code: "GS0206-01", title: "Acoustic Guitar", type: "M", time: "MON 17:30~19:30", teacher: "Han Koen Siq", grade: "S/U", seats: "11", total: "11" },
-    { code: "GS0206-02", title: "Acoustic Guitar", type: "M", time: "MON 19:00~21:00", teacher: "Han Koen Siq", grade: "S/U", seats: "11", total: "11" },
-    { code: "GS0206-03", title: "Acoustic Guitar", type: "M", time: "TUE 19:00~21:00", teacher: "Han Koen Siq", grade: "S/U", seats: "11", total: "11" },
-    { code: "GS0208-01", title: "Base Guitar", type: "W", time: "WED 19:00~21:00", teacher: "Lee, Jae Houng", grade: "S/U", seats: "12", total: "11" },
-    { code: "GS0209-01", title: "Drum", type: "M", time: "TUE 17:30~19:30", teacher: "Bog-Geun Lee", grade: "S/U", seats: "11", total: "11" },
-  ];
 
+// 백엔드에서 받아올 과목 데이터 타입 정의
+export interface CourseType {
+  sectionId: number;
+  courseId: number;
+  courseCode: string;
+  courseSectionCode: string;
+  title: string;
+  type: string;
+  credit: number;
+  sectionNo: string;
+  instructor: string;
+  maxCapacity: number;
+  currentSeats: number;
+  remainingSeats: number;
+  timetableText: string;
+  timeSlots: string[];
+}
+
+interface CourseTableProps {
+  courses: CourseType[];
+  onAdd: (sectionId: number) => void; // 부모로부터 Add 함수를 전달받음
+}
+
+export default function CourseTable({ courses, onAdd }: CourseTableProps) {
   return (
     <div className="w-full overflow-x-auto text-[11px] text-[#333333]">
       <table className="w-full text-center border-collapse border border-[#cccccc]">
@@ -27,27 +43,35 @@ export default function CourseTable() {
           </tr>
         </thead>
         <tbody>
-          {courses.map((course, index) => (
-            <tr key={index} className="h-6 border-b border-[#cccccc] hover:bg-gray-50 bg-white">
-              <td className="border border-[#cccccc] text-indigo-600 underline cursor-pointer font-mono font-medium">{course.code}</td>
+          {courses.map((course) => (
+            <tr key={course.sectionId} className="h-6 border-b border-[#cccccc] hover:bg-gray-50 bg-white">
+              <td className="border border-[#cccccc] text-indigo-600 underline cursor-pointer font-mono font-medium">{course.courseSectionCode}</td>
               <td className="border border-[#cccccc]"></td>
               <td className="border border-[#cccccc] text-left px-2 font-medium">{course.title}</td>
               <td className="border border-[#cccccc] font-mono">{course.type}</td>
               <td className="border border-[#cccccc]"></td>
-              <td className="border border-[#cccccc] text-left px-2 text-[10px] font-mono leading-none pt-0.5">{course.time}</td>
-              <td className="border border-[#cccccc] font-medium">{course.teacher}</td>
-              <td className="border border-[#cccccc] text-gray-600">{course.grade}</td>
-              <td className="border border-[#cccccc] font-mono">{course.seats}</td>
-              <td className="border border-[#cccccc] font-mono">{course.total}</td>
-              <td className="border border-[#cccccc] font-mono font-bold">0</td>
+              <td className="border border-[#cccccc] text-left px-2 text-[10px] font-mono leading-none pt-0.5">{course.timetableText}</td>
+              <td className="border border-[#cccccc] font-medium">{course.instructor}</td>
+              <td className="border border-[#cccccc] text-gray-600">Letter</td>
+              <td className="border border-[#cccccc] font-mono">{course.maxCapacity}</td>
+              <td className="border border-[#cccccc] font-mono">{course.remainingSeats}</td>
+              <td className="border border-[#cccccc] font-mono font-bold">{course.credit}</td>
               <td className="border border-[#cccccc] p-0.5">
-                {/* 완전 각진 투박한 시스템 버튼 고증 */}
-                <button className="w-full h-[18px] bg-[#f2f2f2] border border-[#ababab] text-[10px] text-[#333333] hover:bg-gray-200 font-medium active:bg-gray-300 rounded-none">
+                <button 
+                  onClick={() => onAdd(course.sectionId)}
+                  className="w-full h-[18px] bg-[#f2f2f2] border border-[#ababab] text-[10px] text-[#333333] hover:bg-gray-200 font-medium active:bg-gray-300 rounded-none"
+                >
                   Add
                 </button>
               </td>
             </tr>
           ))}
+          {/* 데이터가 없을 때 표시할 빈 행 */}
+          {courses.length === 0 && (
+            <tr className="h-10 bg-white">
+              <td colSpan={12} className="text-gray-400">조회된 과목이 없습니다.</td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>

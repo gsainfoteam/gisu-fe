@@ -37,10 +37,10 @@ export default function InfoPage({ onNavigateToRegistration }: InfoPageProps) {
         </div>
 
         <div className="flex items-center gap-3 text-white">
-          <button className="bg-[#4a4e52] border border-[#2b2d30] hover:bg-[#5a5e63] text-white px-2 py-0.5 text-[11px] font-medium flex items-center gap-1 shadow-inner">
+          <div className="bg-[#4a4e52] border border-[#2b2d30] hover:bg-[#5a5e63] text-white px-2 py-0.5 text-[11px] font-medium flex items-center gap-1 shadow-inner">
             🔒 LOGOUT <span className="text-white font-mono">02:59:54</span>
-          </button>
-          <span className="text-[#ff3b30] cursor-pointer hover:text-red-400 font-bold text-sm">🔄</span>
+          </div>
+          <span className="text-[#ff3b30]  hover:text-red-400 font-bold text-sm">🔄</span>
           <div className="flex items-center gap-2 text-[11px] text-gray-300 pl-1 border-l border-gray-600">
             <label className="flex items-center gap-1 cursor-pointer">
               <input type="radio" name="lang" defaultChecked className="w-3 h-3 accent-red-600" /> ENG
