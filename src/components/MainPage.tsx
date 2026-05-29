@@ -42,37 +42,49 @@ export default function MainPage({ onBackToInfo }: MainPageProps) {
     timetableBlocks: []
   });
 
-  // 2. 검색 기능 API 호출
-  const handleSearch = async () => {
-    if (!searchCode.trim()) return alert("과목 코드를 입력해주세요.");
-    try {
-      // API URL
-      const res = await axios.get(`https://slip-antics-shadow.ngrok-free.dev/users/session`);
-      setSearchedCourses(res.data);
-    } catch (error) {
-      console.error(error);
-      alert("과목 검색에 실패했습니다.");
+// 2. 검색 기능 API 호출
+const handleSearch = async () => {
+  if (!searchCode.trim()) return alert("과목 코드를 입력해주세요.");
+  try {
+    const res = await axios.get(`/api/courses/search?keyword=${searchCode}`);
+    
+    // 데이터 구조에 따른 안전한 상태 업데이트
+    // 1) res.data가 바로 배열인 경우
+    // 2) res.data.courses 처럼 객체 안에 배열이 있는 경우
+    const data = res.data;
+    if (Array.isArray(data)) {
+      setSearchedCourses(data);
+    } else if (data && Array.isArray(data.courses)) {
+      setSearchedCourses(data.courses);
+    } else {
+      setSearchedCourses([]);
+      console.warn("예상치 못한 데이터 구조:", data);
     }
-  };
+  } catch (error) {
+    console.error(error);
+    alert("과목 검색에 실패했습니다.");
+  }
+};
 
-  // 3. 수강 신청(Add) 기능 API 호출
-  const handleAddCourse = async (sectionId: number) => {
-    try {
-      // API URL
-      const res = await axios.post(`https://slip-antics-shadow.ngrok-free.dev/users/session`, { sectionId });
-      // 백엔드가 준 데이터(학점, 등록목록, 시간표)로 전체 상태 덮어쓰기
-      setRegistrationData(res.data);
-      alert("성공적으로 추가되었습니다.");
-    } catch (error: any) {
-      console.error(error);
-      alert(error.response?.data?.message || "수강 신청에 실패했습니다.");
-    }
-  };
+// 3. 수강 신청(Add) 기능 API 호출
+const handleAddCourse = async (sectionId: number) => {
+  try {
+    const res = await axios.post(`https://slip-antics-shadow.ngrok-free.dev/enrollments`, { sectionId });
+    
+    // 백엔드가 준 데이터 구조에 맞춰 상태 업데이트
+    // 만약 res.data가 RegistrationData 타입과 정확히 일치한다면 그대로 사용
+    setRegistrationData(res.data);
+    alert("성공적으로 추가되었습니다.");
+  } catch (error: any) {
+    console.error(error);
+    alert(error.response?.data?.message || "수강 신청에 실패했습니다.");
+  }
+};
 
   return (
     <div className="w-full h-screen bg-[#f4f4f4] font-sans antialiased text-[11px] text-[#333333] flex flex-col p-2 overflow-hidden select-none">
       
-      {/* 1. 최상단 타이틀 및 빨간색 안내문 */}
+      {/* 1. 제목 및 안내문 */}
       <div className="mb-3 shrink-0">
         <h1 className="text-[12px] font-bold text-[#111111] flex items-center gap-1">
           <span className="text-red-600 text-[9px]">■</span> 수업 &gt; 수강신청처리(학생) [UlsTlsnStudtAplyE]

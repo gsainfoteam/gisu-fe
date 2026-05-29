@@ -1,4 +1,3 @@
-
 // 백엔드에서 받아올 과목 데이터 타입 정의
 export interface CourseType {
   sectionId: number;
