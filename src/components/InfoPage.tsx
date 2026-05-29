@@ -4,20 +4,18 @@ interface InfoPageProps {
 
 export default function InfoPage({ onNavigateToRegistration }: InfoPageProps) {
   return (
-    <div className="w-[2880px] h-[1196px] bg-[#3a3d40] font-sans antialiased text-[11px] text-[#333333] flex flex-col overflow-auto select-none">
+    <div className="w-full h-screen bg-[#3a3d40] font-sans antialiased text-[11px] text-[#333333] flex flex-col overflow-hidden select-none">
       
       <div className="h-[46px] bg-gradient-to-b from-[#2c2f32] to-[#1e2022] border-b border-[#111111] flex justify-between items-center px-4 w-full shrink-0">
         <div className="flex items-center gap-3">
           
           <div className="flex items-center">
-
             <div className="flex items-baseline leading-none">
               <span className="text-[#e31b23] text-[30px] font-black tracking-tighter">G</span>
               <span className="text-white text-[30px] font-black tracking-tighter">IST</span>
             </div>
 
             <div className="w-[1px] h-[25px] bg-gray-400 mx-2"></div>
-
 
             <div className="flex flex-col ml-0.5">
               <div className="text-white text-[15px] font-bold tracking-tight">
